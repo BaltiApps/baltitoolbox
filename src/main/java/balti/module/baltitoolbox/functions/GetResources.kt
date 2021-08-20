@@ -1,5 +1,6 @@
 package balti.module.baltitoolbox.functions
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.widget.ImageViewCompat
 import balti.module.baltitoolbox.ToolboxHQ
 
+@SuppressLint("StaticFieldLeak")
 object GetResources {
 
     private val context = ToolboxHQ.context

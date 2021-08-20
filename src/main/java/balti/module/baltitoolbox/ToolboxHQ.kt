@@ -1,8 +1,10 @@
 package balti.module.baltitoolbox
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 
+@SuppressLint("StaticFieldLeak")
 object ToolboxHQ {
 
     internal lateinit var context: Context

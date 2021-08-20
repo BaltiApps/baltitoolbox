@@ -1,11 +1,13 @@
 package balti.module.baltitoolbox.functions
 
+import android.annotation.SuppressLint
 import android.os.Environment
 import balti.module.baltitoolbox.R
 import balti.module.baltitoolbox.ToolboxHQ
 import balti.module.baltitoolbox.functions.FileHandlers.INTERNAL_TYPE.*
 import java.io.*
 
+@SuppressLint("StaticFieldLeak")
 object FileHandlers {
 
     private val context = ToolboxHQ.context

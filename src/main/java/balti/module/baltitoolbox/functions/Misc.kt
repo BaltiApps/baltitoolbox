@@ -1,5 +1,6 @@
 package balti.module.baltitoolbox.functions
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.util.*
 
+@SuppressLint("StaticFieldLeak")
 object Misc {
 
     private val context = ToolboxHQ.context
