@@ -185,4 +185,8 @@ object Misc {
             }
         })
     }
+
+    fun activityStart(packageContext: Context, cls: Class<*>?) {
+        packageContext.startActivity(Intent(packageContext, cls))
+    }
 }
