@@ -18,8 +18,12 @@ import balti.module.baltitoolbox.R
 import balti.module.baltitoolbox.ToolboxHQ
 import balti.module.baltitoolbox.functions.GetResources.getStringFromRes
 import balti.module.baltitoolbox.jobHandlers.AsyncCoroutineTask
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.util.*
 
@@ -163,7 +167,13 @@ object Misc {
     }
 
     fun runSuspendFunction(f: suspend () -> Unit){
-        CoroutineScope(AsyncCoroutineTask.DISP_DEF).launch {
+        CoroutineScope(Default).launch {
+            f()
+        }
+    }
+
+    fun runOnMainThread(f: () -> Unit) {
+        CoroutineScope(Main).launch{
             f()
         }
     }
