@@ -162,7 +162,7 @@ object Misc {
         Class().execute()
     }
 
-    fun runSuspendFunction(f: () -> Unit){
+    fun runSuspendFunction(f: suspend () -> Unit){
         CoroutineScope(AsyncCoroutineTask.DISP_DEF).launch {
             f()
         }
