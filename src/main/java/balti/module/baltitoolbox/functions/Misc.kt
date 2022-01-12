@@ -9,6 +9,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LifecycleOwner
@@ -198,6 +199,22 @@ object Misc {
 
     fun activityStart(packageContext: Context, cls: Class<*>?) {
         packageContext.startActivity(Intent(packageContext, cls))
+    }
+
+    fun serviceStart(packageContext: Context, serviceIntent: Intent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            packageContext.startForegroundService(serviceIntent)
+        }
+        else {
+            packageContext.startService(serviceIntent)
+        }
+    }
+
+    fun serviceStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null) {
+        val serviceIntent = Intent(packageContext, cls).apply {
+            extras?.let { putExtras(it) }
+        }
+        serviceStart(packageContext, serviceIntent)
     }
 
     /**
