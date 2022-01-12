@@ -197,8 +197,15 @@ object Misc {
         })
     }
 
-    fun activityStart(packageContext: Context, cls: Class<*>?) {
-        packageContext.startActivity(Intent(packageContext, cls))
+    fun activityStart(packageContext: Context, activityIntent: Intent) {
+        packageContext.startActivity(activityIntent)
+    }
+
+    fun activityStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null) {
+        val activityIntent = Intent(packageContext, cls).apply {
+            extras?.let { putExtras(it) }
+        }
+        activityStart(packageContext, activityIntent)
     }
 
     fun serviceStart(packageContext: Context, serviceIntent: Intent) {
