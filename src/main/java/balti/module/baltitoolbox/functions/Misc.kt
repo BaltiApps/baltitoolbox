@@ -33,6 +33,17 @@ object Misc {
 
     private val context = ToolboxHQ.context
 
+    /**
+     * Run a function / block of code, surrounded by try-catch.
+     * Returns result of the function if it executed successfully.
+     *
+     * Show an error dialog using [showErrorDialog] if there was an error in the code block.
+     * Returns the exception.
+     *
+     * @param f The code block to execute
+     * @param showError If `true` then error dialog is shown `false` by default.
+     * In any case, if there is an exception, it is returned.
+     */
     fun tryIt(f: () -> Any?, showError: Boolean = false): Any? {
         return try { f() } catch (e: Exception) {
             if (showError) showErrorDialog(e.message.toString())
@@ -40,16 +51,36 @@ object Misc {
         }
     }
 
+    /**
+     * Run a block of code inside a try-catch block, returning result of the execution.
+     * Ignore any error that might arise.
+     */
     fun tryIt(f: () -> Any?): Any? = tryIt(f, false)
 
+    /**
+     * Run a function / block of code, surrounded by try-catch without returning any result.
+     *
+     * Show an error dialog using [showErrorDialog] if there was an error in the code block.
+     *
+     * @param f The code block to execute
+     * @param showError If `true` then error dialog is shown `false` by default.
+     * The exception is not returned.
+     */
     fun tryIt(f: () -> Unit, showError: Boolean = false) {
         try { f() } catch (e: Exception) {
             if (showError) showErrorDialog(e.message.toString())
         }
     }
 
+    /**
+     * Run a block of code inside a try-catch block, does not return any result.
+     * Ignore any error that might arise.
+     */
     fun tryIt(f: () -> Unit) = tryIt(f, false)
 
+    /**
+     * Check if a [packageName] is installed on the device.
+     */
     fun isPackageInstalled(packageName: String): Boolean{
         return try {
             context.packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA)
@@ -58,6 +89,9 @@ object Misc {
         catch (_: Exception){ false }
     }
 
+    /**
+     * Get the app name from a given [packageName].
+     */
     fun getAppName(packageName: String): String {
         return if (isPackageInstalled(packageName)){
             context.packageManager.getApplicationLabel(
@@ -70,16 +104,30 @@ object Misc {
         else ""
     }
 
-    fun getHumanReadableStorageSpace(spaceInBytes: Long, isSpaceInKB: Boolean = false): String {
+    /**
+     * Take a file size in long and convert it to a String in KB / MB / GB / TB.
+     * Example if [fileSize] = 3453262
+     * Returned is : "3.29 MB"
+     *
+     * @param fileSize File size in Bytes or in KB.
+     * @param isSpaceInKB By default is `false`, set it to `true` if [fileSize] is in KB.
+     * @param spaceBeforeUnit By default is `true`,
+     * set to `false` to remove space between numeric value and unit.
+     */
+    fun getHumanReadableStorageSpace(
+        fileSize: Long,
+        isSpaceInKB: Boolean = false,
+        spaceBeforeUnit: Boolean = true
+    ): String {
 
         var unit = if (isSpaceInKB) "KB" else "B"
 
-        var s = spaceInBytes.toDouble()
+        var s = fileSize.toDouble()
 
-        fun divide(annot: String){
+        fun divide(annotation: String){
             if (s > 1024) {
                 s /= 1024.0
-                unit = annot
+                unit = annotation
             }
         }
 
@@ -88,9 +136,13 @@ object Misc {
         divide("GB")
         divide("TB")
 
-        return String.format("%.2f", s) + " " + unit
+        return String.format("%.2f", s) + (if (spaceBeforeUnit) " " else "") + unit
     }
 
+    /**
+     * Fire an intent to open a web page [url] in a browser.
+     * If [url] is blank, does nothing.
+     */
     fun openWebLink(url: String) {
         if (url != "") {
             context.startActivity(Intent(Intent.ACTION_VIEW).apply {
@@ -100,6 +152,9 @@ object Misc {
         }
     }
 
+    /**
+     * Takes a [packageName] and opens the Google Play Store page for the app.
+     */
     fun playStoreLink(packageName: String){
         openWebLink("market://details?id=$packageName")
     }
@@ -139,8 +194,19 @@ object Misc {
         }
     }
 
+    /**
+     * Keep reading from a [BufferedReader] as long as it does not reach the end (exhausted)
+     * or [loopFunction] does not return `true`.
+     *
+     * @param reader BufferedReader instance to read from.
+     * @param loopFunction Function which takes a String line read from the buffer,
+     * one line at a time and does something.
+     * Must return a Boolean. If it is `true` then the buffer is no longer read.
+     * @param onManualBreakFunction Optional function to be executed if [loopFunction] returns `true`.
+     * Will not be executed if the buffer is naturally read and exhausted.
+     */
     fun iterateBufferedReader(reader: BufferedReader, loopFunction: (line: String) -> Boolean,
-                              onExitFunction: (() -> Unit)? = null){
+                              onManualBreakFunction: (() -> Unit)? = null){
         var doBreak = false
         while (true){
             val line : String? = reader.readLine()
@@ -150,9 +216,16 @@ object Misc {
                 if (doBreak) break
             }
         }
-        if (doBreak) onExitFunction?.invoke()
+        if (doBreak) onManualBreakFunction?.invoke()
     }
 
+    /**
+     * Perform a small background job. Uses [AsyncCoroutineTask].
+     *
+     * @param job The function / block of code to run in background.
+     * @param postJob The function to run after the [job]. This is run in main thread.
+     * It accepts the result / return from [job] as function argument.
+     */
     fun doBackgroundTask(job: () -> Any?, postJob: (result: Any?) -> Any?){
         class Class : AsyncCoroutineTask(){
             override suspend fun doInBackground(arg: Any?): Any? {
@@ -179,13 +252,32 @@ object Misc {
         }
     }
 
+    /**
+     * Get current time in milliseconds.
+     */
     fun timeInMillis() = Calendar.getInstance().timeInMillis
 
+    /**
+     * Get a number ([count]) as a percentage of a [total] number.
+     * Has inbuilt check if [total] is zero.
+     */
     fun getPercentage(count: Int, total: Int): Int {
         return if (total != 0) (count*100)/total
         else 0
     }
 
+    /**
+     * LiveData extension function to fire off an observer only once for the first event
+     * and ignore all other events.
+     *
+     * @param owner Lifecycle owner, basically Activity, Fragment, Service, ViewModels etc.
+     * @param observer The observer to receive the event.
+     * @param validationFunction Optional function. Here we can check the event
+     * and decide that maybe the event was not what we wanted and return `false`.
+     * In that case, even though an event has been fired once, the observer
+     * will continue getting the subsequent events as long as this function does not return `true`.
+     * Once [validationFunction] returns `true`, all further events will not be observed.
+     */
     fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<T>, validationFunction: ((value: T) -> Boolean)? = null) {
         observe(owner, object : Observer<T> {
             override fun onChanged(t: T) {
@@ -197,10 +289,29 @@ object Misc {
         })
     }
 
+    /**
+     * Start an activity from an intent.
+     * Same as [Context.startActivity].
+     *
+     * @param packageContext Context of Activity or Service or
+     * anything else from where the activity is to be started.
+     * @param activityIntent The intent that is to be started.
+     */
     fun activityStart(packageContext: Context, activityIntent: Intent) {
         packageContext.startActivity(activityIntent)
     }
 
+    /**
+     * Start an activity to the given class.
+     *
+     * Similar to `startActivity(Intent(context, MyActivity::class.java))`
+     *
+     * @param packageContext Context of Activity or Service or
+     * anything else from where the activity is to be started.
+     * @param cls Activity class which should be started.
+     * @param extras Bundle having extras for the intent.
+     * @param newTask If `true` then [Intent.FLAG_ACTIVITY_NEW_TASK] is added to the intent.
+     */
     fun activityStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null) {
         val activityIntent = Intent(packageContext, cls).apply {
             extras?.let { putExtras(it) }
@@ -208,6 +319,16 @@ object Misc {
         activityStart(packageContext, activityIntent)
     }
 
+    /**
+     * Start a service from an intent.
+     *
+     * For Android version below Oreo, same as [Context.startActivity].
+     * From Oreo and above, same as [Context.startForegroundService].
+     *
+     * @param packageContext Context of Activity or Service or
+     * anything else from where the service is to be started.
+     * @param serviceIntent The intent that is to be started.
+     */
     fun serviceStart(packageContext: Context, serviceIntent: Intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             packageContext.startForegroundService(serviceIntent)
@@ -217,6 +338,17 @@ object Misc {
         }
     }
 
+    /**
+     * Start a service class from a context.
+     *
+     * For below Oreo, similar to `startService(Intent(context, MyService::class.java))`.
+     * Oreo and above, same as `startForegroundService(Intent(context, MyActivity::class.java))`.
+     *
+     * @param packageContext Context of Activity or Service or
+     * anything else from where the activity is to be started.
+     * @param cls Service class which should be started.
+     * @param extras Bundle having extras for the intent.
+     */
     fun serviceStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null) {
         val serviceIntent = Intent(packageContext, cls).apply {
             extras?.let { putExtras(it) }
