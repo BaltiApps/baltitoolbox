@@ -282,9 +282,10 @@ object Misc {
      * @param extras Bundle having extras for the intent.
      * @param newTask If `true` then [Intent.FLAG_ACTIVITY_NEW_TASK] is added to the intent.
      */
-    fun activityStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null) {
+    fun activityStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null, newTask : Boolean = false) {
         val activityIntent = Intent(packageContext, cls).apply {
             extras?.let { putExtras(it) }
+            if (newTask) addFlags(FLAG_ACTIVITY_NEW_TASK)
         }
         activityStart(packageContext, activityIntent)
     }
