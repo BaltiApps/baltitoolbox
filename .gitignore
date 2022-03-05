@@ -80,3 +80,7 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
+/.idea/
+/gradlew
+/gradlew.bat
+/gradle/
