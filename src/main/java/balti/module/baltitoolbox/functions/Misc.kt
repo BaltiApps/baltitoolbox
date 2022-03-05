@@ -237,16 +237,34 @@ object Misc {
         Class().execute()
     }
 
-    fun runSuspendFunction(f: suspend () -> Unit){
-        CoroutineScope(Default).launch {
-            f()
-        }
+    /**
+     * Can run a given `suspend` function.
+     * Note that unless [lifecycleScope] is specified,
+     * the function is not tied to any specific lifecycle scope.
+     *
+     * @param f Suspend function to execute
+     * @param lifecycleScope Optional scope inside which this suspend function can be run.
+     * Passing `null` create a CoroutineScope with Default dispatcher.
+     */
+    fun runSuspendFunction(lifecycleScope: CoroutineScope? = null, f: suspend () -> Unit){
+        val scope = lifecycleScope ?: CoroutineScope(Default)
+        scope.launch { f() }
     }
 
-    fun runOnMainThread(f: () -> Unit) {
-        CoroutineScope(Main).launch{
-            f()
-        }
+    /**
+     * Can be used to run a function on the main thread.
+     * Particularly useful inside another background thread.
+     *
+     * Note that unless [lifecycleScope] is specified,
+     * the function is not tied to any specific lifecycle scope.
+     *
+     * @param f Normal function to run on main thread.
+     * @param lifecycleScope Optional scope inside which this suspend function can be run.
+     * Passing `null` create a CoroutineScope with Main dispatcher.
+     */
+    fun runOnMainThread(lifecycleScope: CoroutineScope? = null, f: () -> Unit){
+        val scope = lifecycleScope ?: CoroutineScope(Main)
+        scope.launch{ f() }
     }
 
     /**
