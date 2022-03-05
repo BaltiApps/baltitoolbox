@@ -20,6 +20,11 @@ object ToolboxHQ {
         sharedPreferences = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
     }
 
+    /*
+     * Allow access of methods from this class.
+     * Users need not remember what are the available objects.
+     * They can just write "ToolboxHQ." and the IDE will present them with options.
+     */
     val FileHandlers by lazy { balti.module.baltitoolbox.functions.FileHandlers }
     val GetResources by lazy { balti.module.baltitoolbox.functions.GetResources }
     val Misc by lazy { balti.module.baltitoolbox.functions.Misc }
