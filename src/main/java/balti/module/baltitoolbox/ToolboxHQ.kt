@@ -23,6 +23,7 @@ object ToolboxHQ {
     val FileHandlers by lazy { balti.module.baltitoolbox.functions.FileHandlers }
     val GetResources by lazy { balti.module.baltitoolbox.functions.GetResources }
     val Misc by lazy { balti.module.baltitoolbox.functions.Misc }
+    val AndroidUI by lazy { balti.module.baltitoolbox.functions.AndroidUI }
     val SharedPrefs by lazy { balti.module.baltitoolbox.functions.SharedPrefs }
 
     @SuppressLint("InlinedApi")
