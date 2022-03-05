@@ -1,5 +1,6 @@
 package balti.module.baltitoolbox.functions
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -9,8 +10,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -33,7 +32,7 @@ object Misc {
      * Run a function / block of code, surrounded by try-catch.
      * Returns result of the function if it executed successfully.
      *
-     * Show an error dialog using [showErrorDialog] if there was an error in the code block.
+     * Show an error dialog using [AndroidUI.showErrorDialog] if there was an error in the code block.
      * Returns the exception.
      *
      * @param f The code block to execute
@@ -42,7 +41,7 @@ object Misc {
      */
     fun tryIt(f: () -> Any?, showError: Boolean = false): Any? {
         return try { f() } catch (e: Exception) {
-            if (showError) showErrorDialog(e.message.toString())
+            if (showError) AndroidUI.showErrorDialog(e.message.toString())
             e
         }
     }
@@ -56,7 +55,7 @@ object Misc {
     /**
      * Run a function / block of code, surrounded by try-catch without returning any result.
      *
-     * Show an error dialog using [showErrorDialog] if there was an error in the code block.
+     * Show an error dialog using [AndroidUI.showErrorDialog] if there was an error in the code block.
      *
      * @param f The code block to execute
      * @param showError If `true` then error dialog is shown `false` by default.
@@ -64,7 +63,7 @@ object Misc {
      */
     fun tryIt(f: () -> Unit, showError: Boolean = false) {
         try { f() } catch (e: Exception) {
-            if (showError) showErrorDialog(e.message.toString())
+            if (showError) AndroidUI.showErrorDialog(e.message.toString())
         }
     }
 
@@ -162,32 +161,6 @@ object Misc {
             val channel = NotificationChannel(channelId, channelDesc, importance)
             channel.setSound(null, null)
             notificationManager.createNotificationChannel(channel)
-        }
-    }
-
-    fun showErrorDialog(message: String, title: String = "", activityContext: Context? = null,
-                        iconResource: Int = 0, negativeButtonText: String = getStringFromRes(R.string.close), onCloseClick: (() -> Unit)? = null){
-
-        val workingContext = activityContext?: this.application
-
-        try {
-            AlertDialog.Builder(workingContext)
-                    .setIcon(if (iconResource == 0) android.R.drawable.stat_sys_warning else iconResource)
-                    .setMessage(message).apply {
-
-                        setNegativeButton(negativeButtonText) { _, _ -> onCloseClick?.invoke() }
-
-                        setCancelable(onCloseClick == null)
-
-                        if (title == "")
-                            setTitle(R.string.error_occurred)
-                        else setTitle(title)
-
-                    }
-                    .show()
-        } catch (e: Exception){
-            e.printStackTrace()
-            tryIt { Toast.makeText(application, message, Toast.LENGTH_SHORT).show() }
         }
     }
 
@@ -402,5 +375,31 @@ object Misc {
             e.printStackTrace()
             return path
         }
+    }
+
+
+
+
+
+
+
+
+    @Deprecated(
+        message = "Please use AndroidUI.showErrorDialog()",
+        replaceWith = ReplaceWith(
+            expression = "AndroidUI.showErrorDialog(message, title, activityContext, " +
+                    "iconResource, negativeButtonText, onCloseClick)",
+        )
+    )
+    fun showErrorDialog(message: String, title: String = "", activityContext: Context? = null,
+                        iconResource: Int = 0, negativeButtonText: String = getStringFromRes(R.string.close), onCloseClick: (() -> Unit)? = null){
+        AndroidUI.showErrorDialog(
+            message,
+            title,
+            if (activityContext is Activity) activityContext else null,
+            iconResource,
+            negativeButtonText,
+            onCloseClick
+        )
     }
 }
