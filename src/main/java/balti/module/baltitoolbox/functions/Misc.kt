@@ -154,12 +154,39 @@ object Misc {
         openWebLink("market://details?id=$packageName")
     }
 
-    fun makeNotificationChannel(channelId: String, channelDesc: CharSequence, importance: Int){
+    /**
+     * Create a notification channel.
+     * Inbuilt check - Runs only if current android version is above oreo.
+     * Hence can be called in code anywhere, if android version is Nougat or below,
+     * the method will simply not do anything.
+     *
+     * @param channelId String ID for the channel.
+     * @param channelName String name of the channel.
+     * @param importance Int notification channel importance.
+     * @param channelDesc Optional String passed to [NotificationChannel.setDescription].
+     * @param groupId Optional String group id passed to [NotificationChannel.setGroup].
+     * @param silentChannel Optional Boolean, by default `true`.
+     * If passed as false, notifications make sound.
+     * @param customizingFunction Optional function in which the notification channel
+     * can be further customised before creation.
+     */
+    fun makeNotificationChannel(
+        channelId: String,
+        channelName: String,
+        @ToolboxHQ.NotificationImportance importance: Int,
+        channelDesc: String? = null,
+        groupId: String? = null,
+        silentChannel: Boolean = true,
+        customizingFunction: ((NotificationChannel) -> Unit)? = null
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE)
-                    as NotificationManager
-            val channel = NotificationChannel(channelId, channelDesc, importance)
-            channel.setSound(null, null)
+            val notificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                channelDesc?.let { description = it }
+                groupId?.let { group = it }
+                if (silentChannel) setSound(null, null)
+            }
+            customizingFunction?.invoke(channel)
             notificationManager.createNotificationChannel(channel)
         }
     }

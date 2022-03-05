@@ -2,8 +2,10 @@ package balti.module.baltitoolbox
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.IntDef
 
 @SuppressLint("StaticFieldLeak")
 object ToolboxHQ {
@@ -23,5 +25,17 @@ object ToolboxHQ {
     val Misc by lazy { balti.module.baltitoolbox.functions.Misc }
     val SharedPrefs by lazy { balti.module.baltitoolbox.functions.SharedPrefs }
 
+    @SuppressLint("InlinedApi")
+    @IntDef(
+        NotificationManager.IMPORTANCE_MAX,
+        NotificationManager.IMPORTANCE_HIGH,
+        NotificationManager.IMPORTANCE_DEFAULT,
+        NotificationManager.IMPORTANCE_LOW,
+        NotificationManager.IMPORTANCE_MIN,
+        NotificationManager.IMPORTANCE_NONE,
+        NotificationManager.IMPORTANCE_UNSPECIFIED
+    )
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class NotificationImportance
 
 }
