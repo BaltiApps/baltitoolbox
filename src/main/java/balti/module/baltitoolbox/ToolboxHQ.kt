@@ -1,6 +1,7 @@
 package balti.module.baltitoolbox
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -8,10 +9,12 @@ import android.content.SharedPreferences
 object ToolboxHQ {
 
     internal lateinit var context: Context
+    internal lateinit var application: Application
     internal lateinit var sharedPreferences: SharedPreferences
 
     fun init(context: Context){
         this.context = context.applicationContext
+        this.application = context.applicationContext as Application
         sharedPreferences = context.getSharedPreferences(context.packageName, Context.MODE_PRIVATE)
     }
 
