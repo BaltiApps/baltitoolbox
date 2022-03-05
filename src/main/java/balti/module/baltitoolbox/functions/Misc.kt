@@ -1,6 +1,5 @@
 package balti.module.baltitoolbox.functions
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -19,19 +18,16 @@ import balti.module.baltitoolbox.R
 import balti.module.baltitoolbox.ToolboxHQ
 import balti.module.baltitoolbox.functions.GetResources.getStringFromRes
 import balti.module.baltitoolbox.jobHandlers.AsyncCoroutineTask
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.util.*
 
-@SuppressLint("StaticFieldLeak")
 object Misc {
 
-    private val context = ToolboxHQ.context
+    private val application = ToolboxHQ.application
 
     /**
      * Run a function / block of code, surrounded by try-catch.
@@ -83,7 +79,7 @@ object Misc {
      */
     fun isPackageInstalled(packageName: String): Boolean{
         return try {
-            context.packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA)
+            application.packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA)
             true
         }
         catch (_: Exception){ false }
@@ -94,8 +90,8 @@ object Misc {
      */
     fun getAppName(packageName: String): String {
         return if (isPackageInstalled(packageName)){
-            context.packageManager.getApplicationLabel(
-                    context.packageManager.getPackageInfo(
+            application.packageManager.getApplicationLabel(
+                    application.packageManager.getPackageInfo(
                             packageName,
                             PackageManager.GET_META_DATA
                     ).applicationInfo
@@ -145,7 +141,7 @@ object Misc {
      */
     fun openWebLink(url: String) {
         if (url != "") {
-            context.startActivity(Intent(Intent.ACTION_VIEW).apply {
+            application.startActivity(Intent(Intent.ACTION_VIEW).apply {
                 data = Uri.parse(url)
                 addFlags(FLAG_ACTIVITY_NEW_TASK)
             })
@@ -161,7 +157,8 @@ object Misc {
 
     fun makeNotificationChannel(channelId: String, channelDesc: CharSequence, importance: Int){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE)
+                    as NotificationManager
             val channel = NotificationChannel(channelId, channelDesc, importance)
             channel.setSound(null, null)
             notificationManager.createNotificationChannel(channel)
@@ -171,7 +168,7 @@ object Misc {
     fun showErrorDialog(message: String, title: String = "", activityContext: Context? = null,
                         iconResource: Int = 0, negativeButtonText: String = getStringFromRes(R.string.close), onCloseClick: (() -> Unit)? = null){
 
-        val workingContext = activityContext?: this.context
+        val workingContext = activityContext?: this.application
 
         try {
             AlertDialog.Builder(workingContext)
@@ -190,7 +187,7 @@ object Misc {
                     .show()
         } catch (e: Exception){
             e.printStackTrace()
-            tryIt { Toast.makeText(context, message, Toast.LENGTH_SHORT).show() }
+            tryIt { Toast.makeText(application, message, Toast.LENGTH_SHORT).show() }
         }
     }
 
