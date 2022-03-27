@@ -1,5 +1,6 @@
 package balti.module.baltitoolbox.functions
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.content.Context
 import android.content.Intent
@@ -7,6 +8,8 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
+import balti.module.baltitoolbox.R
 import balti.module.baltitoolbox.ToolboxHQ
 import kotlinx.coroutines.CoroutineScope
 import java.io.BufferedReader
@@ -95,5 +98,31 @@ fun serviceStart(packageContext: Context, serviceIntent: Intent) =
 fun serviceStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null) =
     Misc.serviceStart(packageContext, cls, extras)
 fun removeDuplicateSlashes(path: String): String = Misc.removeDuplicateSlashes(path)
+
+// =========================
+
+
+
+// AndroidUI ===============
+
+fun chainDialogs(dialogList: List<AlertDialog>, endJob: (() -> Any?)?) = AndroidUI.chainDialogs(dialogList, endJob)
+
+fun getErrorDialog(
+    message: String,
+    title: String = GetResources.getStringFromRes(R.string.error_occurred),
+    activityContext: Activity? = null,
+    iconResource: Int = 0,
+    negativeButtonText: String = GetResources.getStringFromRes(R.string.close),
+    onCloseClick: (() -> Unit)? = null
+): AlertDialog? = AndroidUI.getErrorDialog(message, title, activityContext, iconResource, negativeButtonText, onCloseClick)
+
+fun showErrorDialog(
+    message: String,
+    title: String = GetResources.getStringFromRes(R.string.error_occurred),
+    activityContext: Activity? = null,
+    iconResource: Int = 0,
+    negativeButtonText: String = GetResources.getStringFromRes(R.string.close),
+    onCloseClick: (() -> Unit)? = null
+): AlertDialog? = AndroidUI.showErrorDialog(message, title, activityContext, iconResource, negativeButtonText, onCloseClick)
 
 // =========================
