@@ -15,7 +15,7 @@ object GetResources {
     private val application = ToolboxHQ.application
 
     fun getStringFromRes(id: Int): String = application.getString(id)
-    fun getStringFromRes(id: Int, vararg formatArgs: Any): String = application.getString(id, formatArgs)
+    fun getStringFromRes(id: Int, vararg formatArgs: Any?): String = application.getString(id, formatArgs)
     fun getDrawableFromRes(id: Int): Drawable? = AppCompatResources.getDrawable(application, id)
     fun getColorFromRes(id: Int): Int = ContextCompat.getColor(application, id)
 
