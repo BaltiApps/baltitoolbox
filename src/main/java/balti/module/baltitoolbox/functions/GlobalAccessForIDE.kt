@@ -3,7 +3,10 @@ package balti.module.baltitoolbox.functions
 import android.app.NotificationChannel
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
 import balti.module.baltitoolbox.ToolboxHQ
 import kotlinx.coroutines.CoroutineScope
 import java.io.BufferedReader
@@ -12,6 +15,20 @@ import java.io.BufferedReader
  * Defining methods here allows to auto complete these methods from the IDE,
  * without importing objects.
  */
+
+// GetResources ============
+
+fun getStringFromRes(id: Int): String = GetResources.getStringFromRes(id)
+fun getStringFromRes(id: Int, vararg formatArgs: Any): String = GetResources.getStringFromRes(id, formatArgs)
+fun getDrawableFromRes(id: Int): Drawable? = GetResources.getDrawableFromRes(id)
+fun getColorFromRes(id: Int): Int = GetResources.getColorFromRes(id)
+
+fun setTintFromRes(view: View, rColor: Int) = GetResources.setTintFromRes(view, rColor)
+fun setTintFromRes(image: ImageView, rColor: Int) = GetResources.setTintFromRes(image, rColor)
+
+// =========================
+
+
 
 // Misc ====================
 
