@@ -102,6 +102,8 @@ fun serviceStart(packageContext: Context, serviceIntent: Intent) =
 fun serviceStart(packageContext: Context, cls: Class<*>?, extras: Bundle? = null) =
     Misc.serviceStart(packageContext, cls, extras)
 fun removeDuplicateSlashes(path: String): String = Misc.removeDuplicateSlashes(path)
+fun transparentColor(actualColor: Int, transparencyPercentage: Int): Int =
+    Misc.transparentColor(actualColor, transparencyPercentage)
 
 // =========================
 

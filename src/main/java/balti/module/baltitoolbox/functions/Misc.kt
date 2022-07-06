@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -445,7 +446,21 @@ object Misc {
         }
     }
 
-
+    /**
+     * Increase transparency if a color.
+     * https://stackoverflow.com/a/30957151
+     *
+     * @param actualColor An actual hex color, not a colour resource id.
+     * @param transparencyPercentage From 0 to 100. If set to 0, has no effect;
+     * if set to 100 makes the colour completely invisible.
+     */
+    fun transparentColor(actualColor: Int, transparencyPercentage: Int): Int {
+        val alpha = getPercentage(255, (100 - transparencyPercentage))
+        if (alpha < 0 || alpha > 255) return actualColor
+        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1)
+            ColorUtils.setAlphaComponent(actualColor, alpha)
+        else (actualColor and 0x00ffffff) or (alpha shl 24)
+    }
 
 
 
