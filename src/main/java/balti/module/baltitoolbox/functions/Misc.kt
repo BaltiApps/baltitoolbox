@@ -305,6 +305,22 @@ object Misc {
     }
 
     /**
+     * Parse a time in seconds to days, hours, minutes, seconds.
+     */
+    fun getHumanReadableTime(seconds: Long): String {
+        val sec = seconds % 60
+        val mins = seconds % 3600 / 60
+        val hours = seconds % 86400 / 3600
+        val days = seconds / 86400
+        // https://stackoverflow.com/a/37855691
+
+        return if (days > 0) "$days d " else "" +
+                if (hours > 0) "$hours hr " else "" +
+                        if (mins > 0) "$mins min " else "" +
+                                if (sec > 0) "$sec sec" else ""
+    }
+
+    /**
      * LiveData extension function to fire off an observer only once for the first event
      * and ignore all other events.
      *
