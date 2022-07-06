@@ -305,6 +305,17 @@ object Misc {
     }
 
     /**
+     * Get percentage of a count between two limits.
+     * Example: What the the percentage of 4 between 2 of 6. Answer = 50%
+     * Here [count] = 4, [lowerLimit] = 2, [upperLimit] = 6
+     */
+    fun getPercentage(count: Int, lowerLimit: Int, upperLimit: Int): Int {
+        val total = upperLimit - lowerLimit
+        return if (total > 0) ((count-lowerLimit)*100)/total
+        else 0
+    }
+
+    /**
      * Parse a time in seconds to days, hours, minutes, seconds.
      */
     fun getHumanReadableTime(seconds: Long): String {

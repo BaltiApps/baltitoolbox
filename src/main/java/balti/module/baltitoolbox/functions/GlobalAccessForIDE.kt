@@ -87,6 +87,8 @@ fun runOnMainThread(lifecycleScope: CoroutineScope? = null, f: () -> Unit) =
 
 fun timeInMillis() = Misc.timeInMillis()
 fun getPercentage(count: Int, total: Int): Int = Misc.getPercentage(count, total)
+fun getPercentage(count: Int, lowerLimit: Int, upperLimit: Int): Int =
+    Misc.getPercentage(count, lowerLimit, upperLimit)
 fun getHumanReadableTime(seconds: Long): String = Misc.getHumanReadableTime(seconds)
 
 fun activityStart(packageContext: Context, activityIntent: Intent) =
