@@ -5,9 +5,12 @@ import android.app.NotificationChannel
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import balti.module.baltitoolbox.R
 import balti.module.baltitoolbox.ToolboxHQ
@@ -25,6 +28,8 @@ fun getStringFromRes(id: Int): String = GetResources.getStringFromRes(id)
 fun getStringFromRes(id: Int, vararg formatArgs: Any?): String = GetResources.getStringFromRes(id, formatArgs)
 fun getDrawableFromRes(id: Int): Drawable? = GetResources.getDrawableFromRes(id)
 fun getColorFromRes(id: Int): Int = GetResources.getColorFromRes(id)
+@RequiresApi(Build.VERSION_CODES.M)
+fun getIconFromRes(id: Int): Icon = GetResources.getIconFromRes(id)
 fun getResourceFromAttr(attrId: Int, context: Context): Int = GetResources.getResourceFromAttr(attrId, context)
 
 fun setTintFromRes(view: View, rColor: Int) = GetResources.setTintFromRes(view, rColor)

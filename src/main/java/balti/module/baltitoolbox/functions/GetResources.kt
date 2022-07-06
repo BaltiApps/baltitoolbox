@@ -3,9 +3,12 @@ package balti.module.baltitoolbox.functions
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -20,6 +23,9 @@ object GetResources {
     fun getStringFromRes(id: Int, vararg formatArgs: Any?): String = application.getString(id, formatArgs)
     fun getDrawableFromRes(id: Int): Drawable? = AppCompatResources.getDrawable(application, id)
     fun getColorFromRes(id: Int): Int = ContextCompat.getColor(application, id)
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun getIconFromRes(id: Int): Icon = Icon.createWithResource(application, id)
 
     /*
      * https://stackoverflow.com/a/27020758
