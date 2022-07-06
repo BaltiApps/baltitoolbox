@@ -89,6 +89,10 @@ fun timeInMillis() = Misc.timeInMillis()
 fun getPercentage(count: Int, total: Int): Int = Misc.getPercentage(count, total)
 fun getPercentage(count: Int, lowerLimit: Int, upperLimit: Int): Int =
     Misc.getPercentage(count, lowerLimit, upperLimit)
+fun getCountFromPercentage(percentage: Int, total: Int): Int =
+    Misc.getCountFromPercentage(percentage, total)
+fun getCountFromPercentage(percentage: Int, lowerLimit: Int, upperLimit: Int): Int =
+    Misc.getCountFromPercentage(percentage, lowerLimit, upperLimit)
 fun getHumanReadableTime(seconds: Long): String = Misc.getHumanReadableTime(seconds)
 
 fun activityStart(packageContext: Context, activityIntent: Intent) =

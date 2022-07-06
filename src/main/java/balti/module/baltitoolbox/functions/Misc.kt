@@ -316,6 +316,21 @@ object Misc {
     }
 
     /**
+     * Opposite of [getPercentage]. Gets the count from percent and total.
+     */
+    fun getCountFromPercentage(percentage: Int, total: Int): Int {
+        return (percentage*total) / 100
+    }
+
+    /**
+     * Considers a lower and upper limit to find real count from a percentage.
+     */
+    fun getCountFromPercentage(percentage: Int, lowerLimit: Int, upperLimit: Int): Int {
+        val total = upperLimit - lowerLimit
+        return ((percentage*total) / 100) + lowerLimit
+    }
+
+    /**
      * Parse a time in seconds to days, hours, minutes, seconds.
      */
     fun getHumanReadableTime(seconds: Long): String {
