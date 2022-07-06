@@ -25,6 +25,7 @@ fun getStringFromRes(id: Int): String = GetResources.getStringFromRes(id)
 fun getStringFromRes(id: Int, vararg formatArgs: Any?): String = GetResources.getStringFromRes(id, formatArgs)
 fun getDrawableFromRes(id: Int): Drawable? = GetResources.getDrawableFromRes(id)
 fun getColorFromRes(id: Int): Int = GetResources.getColorFromRes(id)
+fun getResourceFromAttr(attrId: Int, context: Context): Int = GetResources.getResourceFromAttr(attrId, context)
 
 fun setTintFromRes(view: View, rColor: Int) = GetResources.setTintFromRes(view, rColor)
 fun setTintFromRes(image: ImageView, rColor: Int) = GetResources.setTintFromRes(image, rColor)
