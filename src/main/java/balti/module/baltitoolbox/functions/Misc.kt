@@ -20,6 +20,7 @@ import balti.module.baltitoolbox.jobHandlers.AsyncCoroutineTask
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.util.*
@@ -232,6 +233,27 @@ object Misc {
             override suspend fun onPostExecute(result: Any?) {
                 super.onPostExecute(result)
                 postJob(result)
+            }
+        }
+        Class().execute()
+    }
+
+    /**
+     * Execute a function / block of code after a specified delay.
+     *
+     * @param delayInMillis Delay in milliseconds.
+     * @param function Block of code to execute after the delay.
+     */
+    fun delayTask(delayInMillis: Long, function: () -> Any?) {
+        class Class : AsyncCoroutineTask(){
+            override suspend fun doInBackground(arg: Any?): Any? {
+                delay(delayInMillis)
+                return null
+            }
+
+            override suspend fun onPostExecute(result: Any?) {
+                super.onPostExecute(result)
+                function()
             }
         }
         Class().execute()

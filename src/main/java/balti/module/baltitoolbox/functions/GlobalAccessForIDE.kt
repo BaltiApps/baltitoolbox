@@ -75,6 +75,9 @@ fun iterateBufferedReader(
 fun doBackgroundTask(job: () -> Any?, postJob: (result: Any?) -> Any?) =
     Misc.doBackgroundTask(job, postJob)
 
+fun delayTask(delayInMillis: Long, function: () -> Any?) =
+    Misc.delayTask(delayInMillis, function)
+
 fun runSuspendFunction(lifecycleScope: CoroutineScope? = null, f: suspend () -> Unit) =
     Misc.runSuspendFunction(lifecycleScope, f)
 
